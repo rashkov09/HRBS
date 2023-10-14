@@ -22,6 +22,7 @@ public class MainView implements ConsoleView {
 	                                        0. Exit
 	                                      """;
 	private final UserService userService = new UserServiceImpl();
+	private final ConsoleView adminView = new AdminView();
 	private final UserView userView = new UserView();
 
 	@Override
@@ -40,6 +41,7 @@ public class MainView implements ConsoleView {
 				viewAsGuest();
 		}
 	}
+
 
 	private void viewAsGuest() {
 	}
@@ -73,7 +75,11 @@ public class MainView implements ConsoleView {
 		String password = ConsoleReader.readString();
 		User user = userService.login(username, password);
 		if (user != null) {
-			userView.showItemMenu(user.getFirstName(), this);
+			switch (user.getUserRole()){
+				case USER:	userView.showItemMenu(user.getFirstName(), this);
+				case ADMIN: adminView.showItemMenu(this);
+			}
+
 		} else {
 			System.out.println("Invalid username or password! Please, try again!");
 			this.showItemMenu(this);

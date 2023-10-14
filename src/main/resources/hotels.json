@@ -1,0 +1,1 @@
+[{"id":1,"name":"Riga","address":"gr. Ruse","email":"riga_hotel@gmail.com","phone":"453254324","rooms":[]},{"id":2,"name":"Hotel Dunav","address":"gr. Ruse","email":"dunav_hotel@gmail.com","phone":"12677775444","rooms":[{"roomNumber":101,"roomType":"DELUXE","pricePerNight":23.33,"cancellationFee":33.1235455,"roomStatus":"AVAILABLE"}]}]

@@ -24,7 +24,7 @@ public class UserRepository {
 	}
 
 	private List<User> getAllUsers() {
-		List<User> users = new ArrayList<>();
+		List<User> users;
 		try (Reader reader = new FileReader(jsonFilePath)) {
 			Type userListType = new TypeToken<List<User>>() {
 			}.getType();
