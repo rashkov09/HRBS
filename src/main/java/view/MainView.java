@@ -12,13 +12,12 @@ import static java.lang.System.exit;
 public class MainView implements ConsoleView {
 
 	private static final int MIN_MENU_OPTION = 0;
-	private static final int MAX_MENU_OPTION = 3;
+	private static final int MAX_MENU_OPTION = 2;
 	private final static String MESSAGE = """
 	                                        WELCOME TO Hotel Room Reservation System!
 	                                        Please, select an option to continue:
 	                                        1. Login
 	                                        2. Register
-	                                        3. Browse rooms as guest
 	                                        0. Exit
 	                                      """;
 	private final UserService userService = new UserServiceImpl();
