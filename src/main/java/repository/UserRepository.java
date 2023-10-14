@@ -2,6 +2,7 @@ package repository;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import exceptions.UserAlreadyExistsException;
 import model.User;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -40,6 +41,9 @@ public class UserRepository {
 
 	public boolean addUser(User user) {
 		List<User> users = getAllUsers();
+		if (users.contains(user)){
+			throw new UserAlreadyExistsException();
+		}
 		user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
 		users.add(user);
 		String jsonData = gson.toJson(users);

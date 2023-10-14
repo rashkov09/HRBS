@@ -2,7 +2,11 @@ package model;
 
 import model.enums.UserRole;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
+
 	private String firstName;
 	private String lastName;
 	private UserRole userRole;
@@ -13,6 +17,8 @@ public class User {
 
 	private String username;
 	private String password;
+
+	private List<Booking> bookings;
 
 	public User() {
 	}
@@ -27,6 +33,7 @@ public class User {
 		this.phone = phone;
 		this.username = username;
 		this.password = password;
+		this.bookings = new ArrayList<>();
 	}
 
 	public String getFirstName() {
@@ -83,5 +90,26 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.username.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		User user = (User) obj;
+		return this.username.equals(user.username);
 	}
 }

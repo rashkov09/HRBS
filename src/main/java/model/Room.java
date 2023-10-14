@@ -5,12 +5,25 @@ import model.enums.RoomType;
 
 import java.math.BigDecimal;
 
+import static constants.HotelRoomProperties.DELUXE_ROOM_AMENITIES;
+import static constants.HotelRoomProperties.DELUXE_ROOM_MAX_OCCUPANCY;
+import static constants.HotelRoomProperties.DOUBLE_ROOM_AMENITIES;
+import static constants.HotelRoomProperties.DOUBLE_ROOM_MAX_OCCUPANCY;
+import static constants.HotelRoomProperties.SINGLE_ROOM_AMENITIES;
+import static constants.HotelRoomProperties.SINGLE_ROOM_MAX_OCCUPANCY;
+import static constants.HotelRoomProperties.SUITE_ROOM_AMENITIES;
+import static constants.HotelRoomProperties.SUITE_ROOM_MAX_OCCUPANCY;
+
 public class Room {
+
 	private Integer roomNumber;
 	private RoomType roomType;
 	private BigDecimal pricePerNight;
 	private BigDecimal cancellationFee;
 	private RoomStatus roomStatus;
+
+	private Integer maxOccupancy;
+	private String amenities;
 
 	public Room() {
 	}
@@ -39,6 +52,8 @@ public class Room {
 
 	public void setRoomType(RoomType roomType) {
 		this.roomType = roomType;
+		setAmenities();
+		setMaxOccupancy();
 	}
 
 	public BigDecimal getPricePerNight() {
@@ -63,5 +78,31 @@ public class Room {
 
 	public void setRoomStatus(RoomStatus roomStatus) {
 		this.roomStatus = roomStatus;
+	}
+
+	public Integer getMaxOccupancy() {
+		return maxOccupancy;
+	}
+
+	private void setMaxOccupancy() {
+		switch (roomType) {
+			case SINGLE -> this.maxOccupancy = SINGLE_ROOM_MAX_OCCUPANCY;
+			case DOUBLE -> this.maxOccupancy = DOUBLE_ROOM_MAX_OCCUPANCY;
+			case DELUXE -> this.maxOccupancy = DELUXE_ROOM_MAX_OCCUPANCY;
+			case SUITE -> this.maxOccupancy = SUITE_ROOM_MAX_OCCUPANCY;
+		}
+	}
+
+	public String getAmenities() {
+		return amenities;
+	}
+
+	private void setAmenities() {
+		switch (roomType) {
+			case SINGLE -> this.amenities = SINGLE_ROOM_AMENITIES;
+			case DOUBLE -> this.amenities = DOUBLE_ROOM_AMENITIES;
+			case DELUXE -> this.amenities = DELUXE_ROOM_AMENITIES;
+			case SUITE -> this.amenities = SUITE_ROOM_AMENITIES;
+		}
 	}
 }

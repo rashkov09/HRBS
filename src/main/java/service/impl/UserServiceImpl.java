@@ -1,5 +1,6 @@
 package service.impl;
 
+import exceptions.UserAlreadyExistsException;
 import model.User;
 import repository.UserRepository;
 import service.UserService;
@@ -14,6 +15,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean registerUser(User user) {
-		return userRepository.addUser(user);
+		try {
+			return userRepository.addUser(user);
+		}catch (UserAlreadyExistsException e){
+			System.out.println(e.getMessage());
+			return false;
+		}
 	}
 }

@@ -36,13 +36,7 @@ public class MainView implements ConsoleView {
 				login();
 			case 2:
 				register();
-			case 3:
-				viewAsGuest();
 		}
-	}
-
-
-	private void viewAsGuest() {
 	}
 
 	private void register() {
@@ -62,7 +56,6 @@ public class MainView implements ConsoleView {
 		if (userService.registerUser(user)) {
 			userView.showItemMenu(firstName, this);
 		} else {
-			System.out.println("Something went wrong, please, try again!");
 			this.showItemMenu(this);
 		}
 	}
