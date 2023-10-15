@@ -41,9 +41,6 @@ public class UserRepository {
 
 	public boolean addUser(User user) {
 		List<User> users = getAllUsers();
-		if (users.contains(user)){
-			throw new UserAlreadyExistsException();
-		}
 		user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
 		users.add(user);
 		String jsonData = gson.toJson(users);
@@ -54,5 +51,14 @@ public class UserRepository {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public void checkUsernameAvailability(String input) {
+		List<User> users = getAllUsers();
+		User user = new User();
+		user.setUsername(input);
+		if (users.contains(user)){
+			throw new UserAlreadyExistsException();
+		}
 	}
 }

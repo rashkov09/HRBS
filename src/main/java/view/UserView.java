@@ -1,6 +1,5 @@
 package view;
 
-import android.os.SystemPropertiesProto;
 import model.Booking;
 import model.Hotel;
 import model.Room;
@@ -12,9 +11,6 @@ import service.impl.HotelServiceImpl;
 import util.ConsoleRangeReader;
 import util.ConsoleReader;
 import util.DateParser;
-
-import java.time.Instant;
-import java.util.Date;
 
 public class UserView implements ConsoleView {
 

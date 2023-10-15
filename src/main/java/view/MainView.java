@@ -37,21 +37,9 @@ public class MainView implements ConsoleView {
 	}
 
 	private void register() {
-		System.out.println("Please, insert first name:");
-		String firstName = ConsoleReader.readString();
-		System.out.println("Please, insert last name:");
-		String lastName = ConsoleReader.readString();
-		System.out.println("Please, insert email address:");
-		String email = ConsoleReader.readString();
-		System.out.println("Please, insert phone number:");
-		String phone = ConsoleReader.readString();
-		System.out.println("Please, insert username:");
-		String username = ConsoleReader.readString();
-		System.out.println("Please, insert password:");
-		String password = ConsoleReader.readString();
-		User user = new User(firstName, lastName, UserRole.USER, email, phone, username, password);
+		User user = userService.createUser();
 		if (userService.registerUser(user)) {
-			userView.showItemMenu(firstName, this);
+			userView.showItemMenu(user.getFirstName(), this);
 		} else {
 			this.showItemMenu(this);
 		}
