@@ -5,11 +5,11 @@ import model.Room;
 
 public interface HotelService {
 
-	String addHotel(Hotel hotel);
+	String addHotel();
 
 	String getAllHotels();
 
-	String addRoom(Room room, Integer hotelId);
+	String addRoom();
 
 	String viewRoomsByHotel(int hotelId);
 

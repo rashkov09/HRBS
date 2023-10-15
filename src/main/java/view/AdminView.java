@@ -43,23 +43,7 @@ public class AdminView implements ConsoleView {
 	}
 
 	private void addRoomToHotel(ConsoleView invoker) {
-		System.out.println("Please, insert hotel ID:");
-		System.out.println(hotelService.getAllHotels());
-		int hotelId = ConsoleReader.readInt();
-		System.out.println("Room number:");
-		int roomNumber = ConsoleReader.readInt();
-		int minRoomTypeOption = 1;
-		int maxRoomTypeOption = 4;
-		System.out.println("Please, select room type:\n1. Single\n2. Double\n3. Deluxe\n4. Suite");
-		int roomTypeChoice = ConsoleRangeReader.readInt(minRoomTypeOption, maxRoomTypeOption);
-		System.out.println("Please, insert price per night:");
-		BigDecimal pricePerNight = ConsoleReader.readBigDecimal();
-		System.out.println("Please, insert cancellation price:");
-		BigDecimal cancellationPrice = ConsoleReader.readBigDecimal();
-		Room room =
-			new Room(roomNumber, RoomType.values()[roomTypeChoice - 1], pricePerNight, cancellationPrice,
-			         RoomStatus.AVAILABLE);
-		System.out.println(hotelService.addRoom(room, hotelId));
+		System.out.println(hotelService.addRoom());
 		this.showItemMenu(invoker);
 	}
 
@@ -69,16 +53,7 @@ public class AdminView implements ConsoleView {
 	}
 
 	private void addHotel(ConsoleView invoker) {
-		System.out.println("Please, insert name:");
-		String name = ConsoleReader.readString();
-		System.out.println("Please, insert address:");
-		String address = ConsoleReader.readString();
-		System.out.println("Please, insert email address:");
-		String email = ConsoleReader.readString();
-		System.out.println("Please, insert phone number:");
-		String phone = ConsoleReader.readString();
-		Hotel hotel = new Hotel(name, address, email, phone);
-		System.out.println(hotelService.addHotel(hotel));
+		System.out.println(hotelService.addHotel());
 		this.showItemMenu(invoker);
 	}
 }

@@ -2,15 +2,18 @@ package service.impl;
 
 import exceptions.UserAlreadyExistsException;
 import model.User;
-import model.enums.UserRole;
 import repository.UserRepository;
 import service.UserService;
 import util.ConsoleReader;
 
 import java.util.List;
 
+import static constants.Shared.PREFIX_TEXT;
+
 public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository = new UserRepository();
+	private static final List<String> params = List.of("first name:", "last name", "email address","phone number", "username", "password");
+
 	@Override
 	public User login(String username, String password) {
 
@@ -29,10 +32,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser() {
-		List<String> params = List.of("first name:", "last name", "email address","phone number", "username", "password");
 		User user = new User();
 		for (int i = 0; i < params.size(); i++) {
-			System.out.printf("Please, insert " + params.get(i) + "\n");
+			System.out.printf(PREFIX_TEXT + params.get(i) + "\n");
 			try {
 				String input = ConsoleReader.readString();
 

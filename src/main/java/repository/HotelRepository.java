@@ -2,6 +2,7 @@ package repository;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import exceptions.HotelAlreadyExistsException;
 import exceptions.HotelNotFoundException;
 import model.Hotel;
 import model.Room;
@@ -36,7 +37,7 @@ public class HotelRepository {
 
 	public boolean addHotel(Hotel hotel) {
 		List<Hotel> hotels = getAllHotels();
-		hotel.setId(hotels.size()+1);
+		hotel.setId(hotels.size() + 1);
 		hotels.add(hotel);
 		String jsonData = gson.toJson(hotels);
 		return save(jsonData);
@@ -74,12 +75,25 @@ public class HotelRepository {
 	}
 
 	public void bookRoom(Integer id, Integer roomNumber) {
-		// TODO try catch
+		try {
+			List<Hotel> hotels = getAllHotels();
+			hotels.stream().filter(hotel -> hotel.getId().equals(id)).findFirst().get().getRooms().stream()
+			      .filter(room -> room.getRoomNumber().equals(roomNumber)).findFirst().get().setRoomStatus(
+				      RoomStatus.BOOKED);
+			String jsonData = gson.toJson(hotels);
+			save(jsonData);
+		} catch (NoSuchElementException e) {
+			throw new HotelNotFoundException();
+		}
+	}
+
+	public void checkHotelNameAvailability(String hotelName, String hotelAddress) {
 		List<Hotel> hotels = getAllHotels();
-		hotels.stream().filter(hotel -> hotel.getId().equals(id)).findFirst().get().getRooms().stream()
-		      .filter(room -> room.getRoomNumber().equals(roomNumber)).findFirst().get().setRoomStatus(
-			      RoomStatus.BOOKED);
-		String jsonData = gson.toJson(hotels);
-		 save(jsonData);
+		Hotel hotel = new Hotel();
+		hotel.setName(hotelName);
+		hotel.setAddress(hotelAddress);
+		if (hotels.contains(hotel)) {
+			throw new HotelAlreadyExistsException();
+		}
 	}
 }

@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static constants.Shared.EMAIL_PATTERN;
+import static constants.Shared.PHONE_PATTERN;
+
 public class User {
 	private final static String PASSWORD_ADDITION = " Password should be at least 5 characters!";
 	private static final String USERNAME_PATTERN ="^[A-Za-z0-9_-]{5,}$";
-	private static final String EMAIL_PATTERN ="^[A-Za-z0-9_\\.-]{5,}@[a-z]+\\.[a-z]{2,}$";
 	private static final String NAME_PATTERN = "^[A-Z][a-z]+$";
-	private static final String PHONE_PATTERN = "^[+][0-9]{3}[0-9]{9}|0([0-9]{9})$";
 	private static final String PASSWORD_PATTERN = "^.{5,}$";
 	private String firstName;
 	private String lastName;
