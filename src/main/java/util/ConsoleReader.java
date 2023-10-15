@@ -1,5 +1,6 @@
 package util;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public final class ConsoleReader {
@@ -21,6 +22,15 @@ public final class ConsoleReader {
 			System.out.printf(INVALID_INT, input);
 		}
 		int input = scanner.nextInt();
+		scanner.nextLine();
+		return input;
+	}
+	public static BigDecimal readBigDecimal() {
+		while (!scanner.hasNextBigDecimal()) {
+			String input = scanner.next();
+			System.out.printf(INVALID_INT, input);
+		}
+		BigDecimal input = scanner.nextBigDecimal();
 		scanner.nextLine();
 		return input;
 	}
