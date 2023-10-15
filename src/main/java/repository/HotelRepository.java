@@ -2,8 +2,10 @@ package repository;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import exceptions.HotelNotFoundException;
 import model.Hotel;
 import model.Room;
+import model.enums.RoomStatus;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -34,6 +36,7 @@ public class HotelRepository {
 
 	public boolean addHotel(Hotel hotel) {
 		List<Hotel> hotels = getAllHotels();
+		hotel.setId(hotels.size()+1);
 		hotels.add(hotel);
 		String jsonData = gson.toJson(hotels);
 		return save(jsonData);
@@ -42,16 +45,16 @@ public class HotelRepository {
 	public boolean addRoomToHotel(Room room, Integer hotelId) {
 		List<Hotel> hotels = getAllHotels();
 		try {
-		 	hotels.stream().filter(hotel -> hotel.getId().equals(hotelId)).findFirst().get().addRoom(room);
+			hotels.stream().filter(hotel -> hotel.getId().equals(hotelId)).findFirst().get().addRoom(room);
 			String jsonData = gson.toJson(hotels);
 			return save(jsonData);
-		}catch (NoSuchElementException e){
-			System.out.println("Hotel with id "+ hotelId+" not found!");
+		} catch (NoSuchElementException e) {
+			System.out.println("Hotel with id " + hotelId + " not found!");
 			return false;
 		}
 	}
 
-	private boolean save(String data){
+	private boolean save(String data) {
 		try (FileWriter writer = new FileWriter(jsonFilePath)) {
 			writer.write(data);
 			return true;
@@ -59,5 +62,24 @@ public class HotelRepository {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public Hotel getHotelById(int hotelId) {
+		List<Hotel> hotels = getAllHotels();
+		Hotel hotel = hotels.stream().filter(h -> h.getId().equals(hotelId)).findFirst().orElse(null);
+		if (hotel == null) {
+			throw new HotelNotFoundException();
+		}
+		return hotel;
+	}
+
+	public void bookRoom(Integer id, Integer roomNumber) {
+		// TODO try catch
+		List<Hotel> hotels = getAllHotels();
+		hotels.stream().filter(hotel -> hotel.getId().equals(id)).findFirst().get().getRooms().stream()
+		      .filter(room -> room.getRoomNumber().equals(roomNumber)).findFirst().get().setRoomStatus(
+			      RoomStatus.BOOKED);
+		String jsonData = gson.toJson(hotels);
+		 save(jsonData);
 	}
 }

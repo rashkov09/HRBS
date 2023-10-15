@@ -32,7 +32,7 @@ public class Room {
 		Integer roomNumber, RoomType roomType, BigDecimal pricePerNight, BigDecimal cancellationFee,
 		RoomStatus roomStatus) {
 		this.roomNumber = roomNumber;
-		this.roomType = roomType;
+		setRoomType(roomType);
 		this.pricePerNight = pricePerNight;
 		this.cancellationFee = cancellationFee;
 		this.roomStatus = roomStatus;
@@ -104,5 +104,20 @@ public class Room {
 			case DELUXE -> this.amenities = DELUXE_ROOM_AMENITIES;
 			case SUITE -> this.amenities = SUITE_ROOM_AMENITIES;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format("""
+		                     Room number: %d
+		                     Room type: %s
+		                     Price per night: %.2f
+		                     Cancellation fee: %.2f
+		                     Room status: %s
+		                     Max occupancy: %d
+		                     %s
+		                     """, this.roomNumber, this.roomType.name(), this.pricePerNight, this.cancellationFee,
+		                     this.roomStatus.name(),
+		                     this.maxOccupancy, this.amenities);
 	}
 }

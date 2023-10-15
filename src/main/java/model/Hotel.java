@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hotel {
-private  static Integer COUNTER = 0 ;
 	private Integer id;
 
 	private String name;
@@ -17,7 +16,6 @@ private  static Integer COUNTER = 0 ;
 	}
 
 	public Hotel(String name, String address, String email, String phone) {
-		this.id = ++COUNTER;
 		this.name = name;
 		this.address = address;
 		this.email = email;
@@ -67,6 +65,10 @@ private  static Integer COUNTER = 0 ;
 
 	public Integer getId() {
 		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	@Override

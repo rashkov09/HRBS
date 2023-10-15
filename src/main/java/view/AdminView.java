@@ -35,14 +35,10 @@ public class AdminView implements ConsoleView {
 		System.out.println(MENU);
 		int choice = ConsoleRangeReader.readInt(MIN_MENU_OPTION, MAX_MENU_OPTION);
 		switch (choice) {
-			case 0:
-				invoker.showItemMenu(this);
-			case 1:
-				addHotel(invoker);
-			case 2:
-				addRoomToHotel(invoker);
-			case 7:
-				listAllHotels(invoker);
+			case 0 -> invoker.showItemMenu(this);
+			case 1 -> addHotel(invoker);
+			case 2 -> addRoomToHotel(invoker);
+			case 7 -> listAllHotels(invoker);
 		}
 	}
 
@@ -61,7 +57,8 @@ public class AdminView implements ConsoleView {
 		System.out.println("Please, insert cancellation price:");
 		BigDecimal cancellationPrice = ConsoleReader.readBigDecimal();
 		Room room =
-			new Room(roomNumber, RoomType.values()[roomTypeChoice-1], pricePerNight, cancellationPrice, RoomStatus.AVAILABLE);
+			new Room(roomNumber, RoomType.values()[roomTypeChoice - 1], pricePerNight, cancellationPrice,
+			         RoomStatus.AVAILABLE);
 		System.out.println(hotelService.addRoom(room, hotelId));
 		this.showItemMenu(invoker);
 	}

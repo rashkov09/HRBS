@@ -10,4 +10,10 @@ public interface HotelService {
 	String getAllHotels();
 
 	String addRoom(Room room, Integer hotelId);
+
+	String viewRoomsByHotel(int hotelId);
+
+	Hotel getHotelById(int hotelId);
+
+	void bookRoom(Integer id, Integer roomNumber);
 }

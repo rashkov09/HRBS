@@ -23,4 +23,6 @@ public class HotelRoomProperties {
 	public static final int DELUXE_ROOM_MAX_OCCUPANCY = 2;
 
 	public static final int SUITE_ROOM_MAX_OCCUPANCY = 4;
+
+
 }

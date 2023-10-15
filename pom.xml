@@ -24,6 +24,11 @@
             <artifactId>commons-codec</artifactId>
             <version>1.15</version>
         </dependency>
+        <dependency>
+            <groupId>org.robolectric</groupId>
+            <artifactId>android-all-instrumented</artifactId>
+            <version>12-robolectric-7732740-i3</version>
+        </dependency>
     </dependencies>
 
 </project>

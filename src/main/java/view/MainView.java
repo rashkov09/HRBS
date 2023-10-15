@@ -30,12 +30,9 @@ public class MainView implements ConsoleView {
 		int choice = ConsoleRangeReader.readInt(MIN_MENU_OPTION, MAX_MENU_OPTION);
 
 		switch (choice) {
-			case 0:
-				exit(1);
-			case 1:
-				login();
-			case 2:
-				register();
+			case 0 -> exit(1);
+			case 1 -> login();
+			case 2 -> register();
 		}
 	}
 
