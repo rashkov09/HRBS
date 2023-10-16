@@ -9,4 +9,8 @@ public interface UserService {
 	boolean registerUser(User user);
 
 	User createUser();
+
+	void updateUser(User user);
+
+	String activateAdminUser();
 }

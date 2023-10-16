@@ -4,6 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import exceptions.UserAlreadyExistsException;
 import model.User;
+import model.enums.UserRole;
+import org.apache.commons.codec.digest.DigestUtils;
+import util.GsonFactory;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,18 +15,17 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.codec.digest.DigestUtils;
-
 
 public class UserRepository {
 
 	private static final String jsonFilePath = "src/main/resources/users.json";
-	private final Gson gson = new Gson();
+	private final Gson gson = GsonFactory.getInstance();
 
 	public User validateUser(String username, String password) {
 		String enteredPasswordHash = DigestUtils.sha256Hex(password);
 		return getAllUsers().stream()
-		                    .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(enteredPasswordHash))
+		                    .filter(
+			                    user -> user.getUsername().equals(username) && user.getPassword().equals(enteredPasswordHash))
 		                    .findFirst().orElse(null);
 	}
 
@@ -44,8 +47,21 @@ public class UserRepository {
 		user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
 		users.add(user);
 		String jsonData = gson.toJson(users);
+		return save(jsonData);
+	}
+
+	public void checkUsernameAvailability(String input) {
+		List<User> users = getAllUsers();
+		User user = new User();
+		user.setUsername(input);
+		if (users.contains(user)) {
+			throw new UserAlreadyExistsException();
+		}
+	}
+
+	private boolean save(String data) {
 		try (FileWriter writer = new FileWriter(jsonFilePath)) {
-			writer.write(jsonData);
+			writer.write(data);
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -53,12 +69,24 @@ public class UserRepository {
 		return false;
 	}
 
-	public void checkUsernameAvailability(String input) {
+	public void updateUser(User user) {
 		List<User> users = getAllUsers();
-		User user = new User();
-		user.setUsername(input);
-		if (users.contains(user)){
-			throw new UserAlreadyExistsException();
+		users.removeIf(u -> u.getUsername().equals(user.getUsername()));
+		users.add(user);
+		String jsonData = gson.toJson(users);
+		save(jsonData);
+	}
+
+	public User activateAdminRole(String username) {
+		List<User> users = getAllUsers();
+		for (User currentUser:users){
+			if (currentUser.getUsername().equals(username)){
+				currentUser.setUserRole(UserRole.ADMIN);
+				String jsonData = gson.toJson(users);
+				save(jsonData);
+				return currentUser;
+			}
 		}
+		return null;
 	}
 }

@@ -3,7 +3,8 @@ package repository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Booking;
-import model.Hotel;
+import model.enums.RoomStatus;
+import util.GsonFactory;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class BookingRepository {
 	private static final String jsonFilePath = "src/main/resources/booking.json";
-	private final Gson gson = new Gson();
+	private final Gson gson = GsonFactory.getInstance();
 
 	public boolean addBooking(Booking booking) {
 			List<Booking> bookings = getAllBookings();
@@ -46,5 +47,15 @@ public class BookingRepository {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public boolean checkRoomAvailability(Integer roomNumber) {
+		List<Booking> bookings = getAllBookings();
+		for (Booking booking:bookings){
+			if(booking.getRoom().getRoomNumber().equals(roomNumber) && booking.getRoom().getRoomStatus().equals(RoomStatus.BOOKED)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

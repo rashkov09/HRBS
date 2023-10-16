@@ -1,7 +1,6 @@
 package service;
 
 import model.Hotel;
-import model.Room;
 
 public interface HotelService {
 
@@ -16,4 +15,12 @@ public interface HotelService {
 	Hotel getHotelById(int hotelId);
 
 	void bookRoom(Integer id, Integer roomNumber);
+
+	String removeRoom();
+
+	String removeHotel();
+
+	String editHotel();
+
+	String editRoomInHotel();
 }

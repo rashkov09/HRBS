@@ -2,6 +2,7 @@ package service.impl;
 
 import exceptions.UserAlreadyExistsException;
 import model.User;
+import model.enums.UserRole;
 import repository.UserRepository;
 import service.UserService;
 import util.ConsoleReader;
@@ -11,20 +12,23 @@ import java.util.List;
 import static constants.Shared.PREFIX_TEXT;
 
 public class UserServiceImpl implements UserService {
+
+	private static final String ADMIN_PASSWORD = "admin99";
+	private static final List<String> params =
+		List.of("first name:", "last name", "email address", "phone number", "username", "password");
 	private final UserRepository userRepository = new UserRepository();
-	private static final List<String> params = List.of("first name:", "last name", "email address","phone number", "username", "password");
 
 	@Override
 	public User login(String username, String password) {
 
-		return userRepository.validateUser(username,password);
+		return userRepository.validateUser(username, password);
 	}
 
 	@Override
 	public boolean registerUser(User user) {
 		try {
 			return userRepository.addUser(user);
-		}catch (UserAlreadyExistsException e){
+		} catch (UserAlreadyExistsException e) {
 			System.out.println(e.getMessage());
 			return false;
 		}
@@ -49,11 +53,35 @@ public class UserServiceImpl implements UserService {
 					}
 					case 5 -> user.setPassword(input);
 				}
-			}catch (Exception e ){
+			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				i--;
 			}
 		}
+		user.setUserRole(UserRole.USER);
 		return user;
+	}
+
+	@Override
+	public void updateUser(User user) {
+		userRepository.updateUser(user);
+	}
+
+	@Override
+	public String activateAdminUser() {
+		System.out.println("Username:");
+		String username = ConsoleReader.readString();
+		System.out.println("ADMIN password:");
+		String password = ConsoleReader.readString();
+		if (password.equals(ADMIN_PASSWORD)) {
+			User user = userRepository.activateAdminRole(username);
+			if (user == null) {
+				return "Wrong password or username!";
+			}
+			if (!user.getUserRole().equals(UserRole.ADMIN)) {
+				return "Wrong password or username!";
+			}
+		}
+		return "ADMIN role added successfully!";
 	}
 }
