@@ -137,4 +137,5 @@ public class HotelRepository {
 		       updatedHotel.getPhone().equals(hotel.getPhone());
 
 	}
+
 }

@@ -15,17 +15,18 @@ import java.math.BigDecimal;
 public class AdminView implements ConsoleView {
 
 	public static final String MENU = """
-	                                  Please, select and option to continue:
-	                                  1. Add Hotel
-	                                  2. Add Room to hotel
-	                                  3. Edit Hotel
-	                                  4. Edit Room in hotel
-	                                  5. Remove Hotel
-	                                  6. Remove Room in hotel
-	                                  7. List Hotels
-	                                  8. List users
-	                                  9. Remove user
-	                                  0. Logout
+	                                    Please, select and option to continue:
+	                                      1. Add Hotel
+	                                      2. Add Room to hotel
+	                                      3. Edit Hotel
+	                                      4. Edit Room in hotel
+	                                      5. Remove Hotel
+	                                      6. Remove Room in hotel
+	                                      7. List Hotels
+	                                      8. List all bookings
+	                                      9. Remove user
+	                                      
+	                                      0. Logout
 	                                  """;
 	private static final int MIN_MENU_OPTION = 0;
 	private static final int MAX_MENU_OPTION = 9;

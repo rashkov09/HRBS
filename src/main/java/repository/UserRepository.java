@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import exceptions.UserAlreadyExistsException;
 import model.User;
+import model.enums.UserRole;
 import org.apache.commons.codec.digest.DigestUtils;
 import util.GsonFactory;
 
@@ -74,5 +75,18 @@ public class UserRepository {
 		users.add(user);
 		String jsonData = gson.toJson(users);
 		save(jsonData);
+	}
+
+	public User activateAdminRole(String username) {
+		List<User> users = getAllUsers();
+		for (User currentUser:users){
+			if (currentUser.getUsername().equals(username)){
+				currentUser.setUserRole(UserRole.ADMIN);
+				String jsonData = gson.toJson(users);
+				save(jsonData);
+				return currentUser;
+			}
+		}
+		return null;
 	}
 }

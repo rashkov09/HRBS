@@ -3,6 +3,7 @@ package repository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Booking;
+import model.enums.RoomStatus;
 import util.GsonFactory;
 
 import java.io.FileReader;
@@ -46,5 +47,15 @@ public class BookingRepository {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public boolean checkRoomAvailability(Integer roomNumber) {
+		List<Booking> bookings = getAllBookings();
+		for (Booking booking:bookings){
+			if(booking.getRoom().getRoomNumber().equals(roomNumber) && booking.getRoom().getRoomStatus().equals(RoomStatus.BOOKED)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

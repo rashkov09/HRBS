@@ -1,7 +1,6 @@
 package service;
 
 import model.Hotel;
-import model.Room;
 
 public interface HotelService {
 

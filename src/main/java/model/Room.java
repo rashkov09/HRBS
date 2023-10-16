@@ -109,14 +109,14 @@ public class Room {
 	@Override
 	public String toString() {
 		return String.format("""
-		                     Room number: %d
-		                     Room type: %s
-		                     Price per night: %.2f
-		                     Cancellation fee: %.2f
-		                     Room status: %s
-		                     Max occupancy: %d
-		                     %s
-		                     """, this.roomNumber, this.roomType.name(), this.pricePerNight, this.cancellationFee,
+                         Room number: %d
+                         Room type: %s
+                         Price per night: %.2f
+                         Cancellation fee: %.2f
+                         Room status: %s
+                         Max occupancy: %d
+                         %s
+                         """, this.roomNumber, this.roomType.name(), this.pricePerNight, this.cancellationFee,
 		                     this.roomStatus.name(),
 		                     this.maxOccupancy, this.amenities);
 	}

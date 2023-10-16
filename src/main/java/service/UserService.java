@@ -11,4 +11,6 @@ public interface UserService {
 	User createUser();
 
 	void updateUser(User user);
+
+	String activateAdminUser();
 }

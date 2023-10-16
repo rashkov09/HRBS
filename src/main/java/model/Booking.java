@@ -3,9 +3,9 @@ package model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 public class Booking {
+
 	private Integer id;
 	private Hotel hotel;
 	private Room room;
@@ -22,7 +22,6 @@ public class Booking {
 		this.fromDate = fromDate;
 		this.toDate = toDate;
 	}
-
 
 	public Hotel getHotel() {
 		return hotel;
@@ -64,8 +63,25 @@ public class Booking {
 		this.id = id;
 	}
 
-	public BigDecimal calculateProfit(){
-		long days = ChronoUnit.DAYS.between(fromDate,toDate);
+	public BigDecimal calculateProfit() {
+		long days = ChronoUnit.DAYS.between(fromDate, toDate);
 		return this.room.getPricePerNight().multiply(BigDecimal.valueOf(days));
+	}
+
+	@Override
+	public String toString() {
+		return String.format("""
+                         ------------------------------
+                         Booking ID: %d
+                         Hotel name: %s
+                         Room number: %d
+                         From: %s
+                         To: %s
+                         Total price: %.2f
+                         Cancellation fee: %.2f
+                         ------------------------------
+                         """, this.getId(), this.getHotel().getName(), this.getRoom().getRoomNumber(),
+		                     this.getFromDate().toString(), this.getToDate().toString(), this.calculateProfit(),
+		                     this.getRoom().getCancellationFee());
 	}
 }

@@ -1,7 +1,6 @@
 package view;
 
 import model.User;
-import model.enums.UserRole;
 import service.UserService;
 import service.impl.UserServiceImpl;
 import util.ConsoleRangeReader;
@@ -12,14 +11,17 @@ import static java.lang.System.exit;
 public class MainView implements ConsoleView {
 
 	private static final int MIN_MENU_OPTION = 0;
-	private static final int MAX_MENU_OPTION = 2;
+	private static final int MAX_MENU_OPTION = 3;
+	private static final String INVALID_USERNAME_OR_PASSWORD_MESSAGE ="Invalid username or password! Please, try again!";
 	private final static String MESSAGE = """
-	                                        WELCOME TO Hotel Room Reservation System!
-	                                        Please, select an option to continue:
-	                                        1. Login
-	                                        2. Register
-	                                        0. Exit
-	                                      """;
+                                          WELCOME TO Hotel Room Reservation System!
+                                          Please, select an option to continue:
+                                            1. Login
+                                            2. Register
+                                            3. Activate ADMIN user
+	                                          
+                                            0. Exit
+                                        """;
 	private final UserService userService = new UserServiceImpl();
 	private final ConsoleView adminView = new AdminView();
 	private final UserView userView = new UserView();
@@ -33,7 +35,13 @@ public class MainView implements ConsoleView {
 			case 0 -> exit(1);
 			case 1 -> login();
 			case 2 -> register();
+			case 3 -> activateAdmin();
 		}
+	}
+
+	private void activateAdmin() {
+			System.out.println(userService.activateAdminUser());
+			this.showItemMenu(this);
 	}
 
 	private void register() {
@@ -58,7 +66,7 @@ public class MainView implements ConsoleView {
 			}
 
 		} else {
-			System.out.println("Invalid username or password! Please, try again!");
+			System.out.println(INVALID_USERNAME_OR_PASSWORD_MESSAGE);
 			this.showItemMenu(this);
 		}
 	}

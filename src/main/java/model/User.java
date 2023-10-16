@@ -11,8 +11,9 @@ import static constants.Shared.EMAIL_PATTERN;
 import static constants.Shared.PHONE_PATTERN;
 
 public class User {
+
 	private final static String PASSWORD_ADDITION = " Password should be at least 5 characters!";
-	private static final String USERNAME_PATTERN ="^[A-Za-z0-9_-]{5,}$";
+	private static final String USERNAME_PATTERN = "^[A-Za-z0-9_-]{5,}$";
 	private static final String NAME_PATTERN = "^[A-Z][a-z]+$";
 	private static final String PASSWORD_PATTERN = "^.{5,}$";
 	private String firstName;
@@ -26,7 +27,7 @@ public class User {
 	private String username;
 	private String password;
 
-	private List<Booking> bookings;
+	private List<Booking> bookings = new ArrayList<>();
 
 	public User() {
 	}
@@ -49,8 +50,8 @@ public class User {
 	}
 
 	public void setFirstName(String firstName) {
-		if (!Pattern.matches(NAME_PATTERN,firstName)) {
-		 throw new InvalidUserInputException("first name");
+		if (!Pattern.matches(NAME_PATTERN, firstName)) {
+			throw new InvalidUserInputException("first name");
 		}
 		this.firstName = firstName;
 	}
@@ -60,7 +61,7 @@ public class User {
 	}
 
 	public void setLastName(String lastName) {
-		if (!Pattern.matches(NAME_PATTERN,lastName)) {
+		if (!Pattern.matches(NAME_PATTERN, lastName)) {
 			throw new InvalidUserInputException("last name");
 		}
 		this.lastName = lastName;
@@ -79,7 +80,7 @@ public class User {
 	}
 
 	public void setEmail(String email) {
-		if (!Pattern.matches(EMAIL_PATTERN,email)) {
+		if (!Pattern.matches(EMAIL_PATTERN, email)) {
 			throw new InvalidUserInputException("email");
 		}
 		this.email = email;
@@ -90,7 +91,7 @@ public class User {
 	}
 
 	public void setPhone(String phone) {
-		if (!Pattern.matches(PHONE_PATTERN,phone)) {
+		if (!Pattern.matches(PHONE_PATTERN, phone)) {
 			throw new InvalidUserInputException("phone");
 		}
 		this.phone = phone;
@@ -101,7 +102,7 @@ public class User {
 	}
 
 	public void setUsername(String username) {
-		if (!Pattern.matches(USERNAME_PATTERN,username)) {
+		if (!Pattern.matches(USERNAME_PATTERN, username)) {
 			throw new InvalidUserInputException("username");
 		}
 		this.username = username;
@@ -112,8 +113,8 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		if (!Pattern.matches(PASSWORD_PATTERN,password)) {
-			throw new InvalidUserInputException("password",PASSWORD_ADDITION);
+		if (!Pattern.matches(PASSWORD_PATTERN, password)) {
+			throw new InvalidUserInputException("password", PASSWORD_ADDITION);
 		}
 		this.password = password;
 	}
@@ -137,5 +138,22 @@ public class User {
 		}
 		User user = (User) obj;
 		return this.username.equals(user.username);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		String params = """
+                      First name: %s
+                      Last name: %s
+                      Current role: %s
+                      Email: %s
+                      Phone: %s
+                      Bookings:
+                    """;
+		builder.append(String.format(params, this.getFirstName(), this.getLastName(), this.getUserRole(), this.getEmail(),
+		                             this.getPhone())).append(System.lineSeparator());
+		this.getBookings().forEach(booking -> builder.append("\t").append(booking).append(System.lineSeparator()));
+		return builder.toString();
 	}
 }

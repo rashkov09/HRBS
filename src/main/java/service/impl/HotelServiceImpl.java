@@ -1,6 +1,5 @@
 package service.impl;
 
-import android.os.SystemPropertiesProto;
 import exceptions.HotelNotFoundException;
 import exceptions.RoomNotFoundException;
 import model.Hotel;
@@ -34,14 +33,31 @@ public class HotelServiceImpl implements HotelService {
 	private final static String REMOVE_ROOM_SUCCESS = "Room removed successfully!";
 	private final static String REMOVE_HOTEL_SUCCESS = "Hotel removed successfully!";
 	private final static String HOTEL_UPDATED_SUCCESS = "Hotel edited successfully!";
+	private final static String ROOM_UPDATE_SUCCESS = "Room updated successfully!";
 	private final static String REMOVE_ROOM_FAIL = "Removing of room failed!";
 	private final static String REMOVE_HOTEL_FAIL = "Removing of hotel failed!";
 	private final static String HOTEL_UPDATED_FAIL = "Hotel edit failed!";
-	private final static String HOTEL_EDIT_PARAMS =
-		"1. Hotel name\n2. Hotel Address\n3. Email address\n4. Phone number\n\n5. Cancel\n\n0. SAVE";
-	private final static String ROOM_EDIT_PARAMS =
-		"1. Room number\n2. Room type\n3. Room price per night\n4. Room cancellation fee\n5. Room status\n\n6. CANCEL\n\n0" +
-		". SAVE";
+	private final static String HOTEL_UPDATE_FAIL = "Room edit failed!";
+	private final static String ROOM_EXISTS_ERROR = "Room number already exists!";
+	private final static String HOTEL_EDIT_PARAMS = """
+                                                  1. Hotel name
+                                                  2. Hotel Address
+                                                  3. Email address
+                                                  4. Phone number
+	                                                                                                
+                                                  5. Cancel
+                                                  0. SAVE
+                                                  """;
+	private final static String ROOM_EDIT_PARAMS = """
+                                                 1. Room number
+                                                 2. Room type
+                                                 3. Room price per night
+                                                 4. Room cancellation fee
+                                                 5. Room status
+	                                                                                              
+                                                 6. CANCEL
+                                                 0. SAVE
+                                                 """;
 
 	private final static int MIN_ROOM_TYPE_INT = 1;
 	private final static int MIN_ROOM_STATUS_INT = 1;
@@ -100,23 +116,31 @@ public class HotelServiceImpl implements HotelService {
 	@Override
 	public String addRoom() {
 		int hotelId = getHotelId();
-		System.out.println(PREFIX_TEXT + AVAILABLE_ROOM_NUMBER);
-		int roomNumber = ConsoleReader.readInt();
-		System.out.println(PREFIX_TEXT + ROOM_TYPE_SELECT);
-		int roomTypeChoice = ConsoleRangeReader.readInt(MIN_ROOM_TYPE_INT, MAX_ROOM_TYPE_INT);
-		System.out.println(PREFIX_TEXT + PRICE_PER_NIGHT);
-		BigDecimal pricePerNight = ConsoleReader.readBigDecimal();
-		System.out.println(PREFIX_TEXT + CANCELLATION_PRICE);
-		BigDecimal cancellationPrice = ConsoleReader.readBigDecimal();
-		Room room =
-			new Room(roomNumber, RoomType.values()[roomTypeChoice - 1], pricePerNight, cancellationPrice,
-			         RoomStatus.AVAILABLE);
 		try {
-			hotelRepository.addRoomToHotel(room, hotelId);
-			return String.format(ROOM_ADD_SUCCESS_MESSAGE, room.getRoomNumber(), hotelId);
+			Hotel hotel = hotelRepository.getHotelById(hotelId);
+			System.out.println(PREFIX_TEXT + AVAILABLE_ROOM_NUMBER);
+			int roomNumber = ConsoleReader.readInt();
+			if (isRoomNumberAvailable(roomNumber, hotel)) {
+				System.out.println(PREFIX_TEXT + ROOM_TYPE_SELECT);
+				int roomTypeChoice = ConsoleRangeReader.readInt(MIN_ROOM_TYPE_INT, MAX_ROOM_TYPE_INT);
+				System.out.println(PREFIX_TEXT + PRICE_PER_NIGHT);
+				BigDecimal pricePerNight = ConsoleReader.readBigDecimal();
+				System.out.println(PREFIX_TEXT + CANCELLATION_PRICE);
+				BigDecimal cancellationPrice = ConsoleReader.readBigDecimal();
+				Room room =
+					new Room(roomNumber, RoomType.values()[roomTypeChoice - 1], pricePerNight, cancellationPrice,
+					         RoomStatus.AVAILABLE);
+				hotelRepository.addRoomToHotel(room, hotelId);
+				return String.format(ROOM_ADD_SUCCESS_MESSAGE, room.getRoomNumber(), hotelId);
+			}
+			return ROOM_EXISTS_ERROR;
 		} catch (Exception e) {
 			return String.format(e.getMessage(), hotelId);
 		}
+	}
+
+	private boolean isRoomNumberAvailable(int roomNumber, Hotel hotel) {
+		return hotel.getRooms().stream().noneMatch(r -> r.getRoomNumber().equals(roomNumber));
 	}
 
 	@Override
@@ -297,9 +321,9 @@ public class HotelServiceImpl implements HotelService {
 			}
 			hotel.getRooms().add(room);
 			if (hotelRepository.updateHotel(hotel)) {
-				return "Room updated successfully!";
+				return ROOM_UPDATE_SUCCESS;
 			}
-			return "Room update failed!";
+			return HOTEL_UPDATE_FAIL;
 		} catch (Exception e) {
 			return e.getMessage();
 		}
