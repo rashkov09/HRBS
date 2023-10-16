@@ -1,5 +1,6 @@
 package view;
 
+import android.os.SystemPropertiesProto;
 import model.Hotel;
 import model.Room;
 import model.enums.RoomStatus;
@@ -38,8 +39,32 @@ public class AdminView implements ConsoleView {
 			case 0 -> invoker.showItemMenu(this);
 			case 1 -> addHotel(invoker);
 			case 2 -> addRoomToHotel(invoker);
+			case 3 -> editHotel(invoker);
+			case 4 -> editRoomIInHotel(invoker);
+			case 5 -> removeHotel(invoker);
+			case 6 -> removeRoomFromHotel(invoker);
 			case 7 -> listAllHotels(invoker);
 		}
+	}
+
+	private void editRoomIInHotel(ConsoleView invoker) {
+		System.out.println(hotelService.editRoomInHotel());
+		this.showItemMenu(invoker);
+	}
+
+	private void editHotel(ConsoleView invoker) {
+		System.out.println(hotelService.editHotel());
+		this.showItemMenu(invoker);
+	}
+
+	private void removeHotel(ConsoleView invoker) {
+		System.out.println(hotelService.removeHotel());
+		this.showItemMenu(invoker);
+	}
+
+	private void removeRoomFromHotel(ConsoleView invoker) {
+		System.out.println(hotelService.removeRoom());
+		this.showItemMenu(invoker);
 	}
 
 	private void addRoomToHotel(ConsoleView invoker) {

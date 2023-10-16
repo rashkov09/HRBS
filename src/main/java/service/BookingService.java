@@ -1,8 +1,9 @@
 package service;
 
 import model.Booking;
+import model.User;
 
 public interface BookingService {
 
-	String addBooking();
+	String addBooking(User user);
 }

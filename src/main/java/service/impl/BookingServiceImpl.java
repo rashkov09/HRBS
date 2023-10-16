@@ -3,10 +3,12 @@ package service.impl;
 import model.Booking;
 import model.Hotel;
 import model.Room;
+import model.User;
 import model.enums.RoomStatus;
 import repository.BookingRepository;
 import service.BookingService;
 import service.HotelService;
+import service.UserService;
 import util.ConsoleReader;
 import util.DateParser;
 
@@ -23,9 +25,10 @@ public class BookingServiceImpl implements BookingService {
 	private static final String BOOKING_FAILED = "Booking failed!";
 	private final BookingRepository bookingRepository = new BookingRepository();
 	private final HotelService hotelService = new HotelServiceImpl();
+	private final UserService userService = new UserServiceImpl();
 
 	@Override
-	public String addBooking() {
+	public String addBooking(User user) {
 		String result = "";
 		System.out.println(PREFIX_TEXT + FROM_DATE);
 		String fromDate = ConsoleReader.readString();
@@ -55,6 +58,8 @@ public class BookingServiceImpl implements BookingService {
 			if (bookingRepository.addBooking(booking)) {
 				try {
 					hotelService.bookRoom(booking.getHotel().getId(), booking.getRoom().getRoomNumber());
+					user.getBookings().add(booking);
+					userService.updateUser(user);
 					result = BOOKING_SUCCESSFUL;
 				} catch (Exception e) {
 					result = e.getMessage();

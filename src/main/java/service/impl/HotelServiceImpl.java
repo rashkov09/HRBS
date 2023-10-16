@@ -1,6 +1,8 @@
 package service.impl;
 
+import android.os.SystemPropertiesProto;
 import exceptions.HotelNotFoundException;
+import exceptions.RoomNotFoundException;
 import model.Hotel;
 import model.Room;
 import model.enums.RoomStatus;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static constants.Shared.AVAILABLE_ROOM_NUMBER;
+import static constants.Shared.EDIT_SELECT;
 import static constants.Shared.HOTEL_ID;
 import static constants.Shared.PREFIX_TEXT;
 import static constants.Shared.VERTICAL_BORDER;
@@ -24,19 +27,41 @@ public class HotelServiceImpl implements HotelService {
 	private final static String FAIl_MESSAGE = "Hotel %s was not added successfully, please try again!";
 	private final static String ROOM_ADD_SUCCESS_MESSAGE = "Room number %d added successfully to hotel id %d";
 	private final static String ROOM_TYPE_SELECT = "room type:\n1. Single\n2. Double\n3. Deluxe\n4. Suite";
+	private final static String ROOM_STATUS_SELECT = "room status:\n1. BOOKED \n2. AVAILABLE";
 	private final static String PRICE_PER_NIGHT = "price per night:";
-	private final static String CANCELLATION_PRICE =  "cancellation price:";
-	private final static String NO_ROOMS_IN_HOTEL =  "No rooms in this hotel!";
-	private final static int MIN_ROOM_TYPE_INT =  1;
-	private final static int MAX_ROOM_TYPE_INT =  4;
+	private final static String CANCELLATION_PRICE = "cancellation price:";
+	private final static String NO_ROOMS_IN_HOTEL = "No rooms in this hotel!";
+	private final static String REMOVE_ROOM_SUCCESS = "Room removed successfully!";
+	private final static String REMOVE_HOTEL_SUCCESS = "Hotel removed successfully!";
+	private final static String HOTEL_UPDATED_SUCCESS = "Hotel edited successfully!";
+	private final static String REMOVE_ROOM_FAIL = "Removing of room failed!";
+	private final static String REMOVE_HOTEL_FAIL = "Removing of hotel failed!";
+	private final static String HOTEL_UPDATED_FAIL = "Hotel edit failed!";
+	private final static String HOTEL_EDIT_PARAMS =
+		"1. Hotel name\n2. Hotel Address\n3. Email address\n4. Phone number\n\n5. Cancel\n\n0. SAVE";
+	private final static String ROOM_EDIT_PARAMS =
+		"1. Room number\n2. Room type\n3. Room price per night\n4. Room cancellation fee\n5. Room status\n\n6. CANCEL\n\n0" +
+		". SAVE";
+
+	private final static int MIN_ROOM_TYPE_INT = 1;
+	private final static int MIN_ROOM_STATUS_INT = 1;
+	private final static int MIN_HOTEL_EDIT_INT = 0;
+	private final static int MIN_ROOM_EDIT_INT = 0;
+	private final static int MAX_ROOM_TYPE_INT = 4;
+	private final static int MAX_ROOM_STATUS_INT = 2;
+	private final static int MAX_HOTEL_EDIT_INT = 5;
+	private final static int MAX_ROOM_EDIT_INT = 6;
 	private static final List<String>
-		params = List.of("hotel name:", "hotel address", "email address", "phone number");
+		HOTEL_PARAMS = List.of("hotel name:", "hotel address", "email address", "phone number");
+	private static final List<String>
+		ROOM_PARAMS = List.of("room number:", "room type", "room price per night", "room cancellation fee", "room status");
+
 	private final HotelRepository hotelRepository = new HotelRepository();
 
 	@Override
 	public String addHotel() {
-	  Hotel hotel = createHotel();
- 		if (hotelRepository.addHotel(hotel)) {
+		Hotel hotel = createHotel();
+		if (hotelRepository.addHotel(hotel)) {
 			return String.format(SUCCESS_MESSAGE, hotel.getName());
 		}
 		return String.format(FAIl_MESSAGE, hotel.getName());
@@ -44,14 +69,14 @@ public class HotelServiceImpl implements HotelService {
 
 	private Hotel createHotel() {
 		Hotel hotel = new Hotel();
-		for (int i = 0; i < params.size(); i++) {
-			System.out.printf(PREFIX_TEXT + params.get(i) + "\n");
+		for (int i = 0; i < HOTEL_PARAMS.size(); i++) {
+			System.out.printf(PREFIX_TEXT + HOTEL_PARAMS.get(i) + "\n");
 			try {
 				String input = ConsoleReader.readString();
 				switch (i) {
 					case 0 -> hotel.setName(input);
 					case 1 -> {
-						hotelRepository.checkHotelNameAvailability(hotel.getName(),input);
+						hotelRepository.checkHotelNameAvailability(hotel.getName(), input);
 						hotel.setAddress(input);
 					}
 					case 2 -> hotel.setEmail(input);
@@ -62,7 +87,7 @@ public class HotelServiceImpl implements HotelService {
 				i--;
 			}
 		}
-			return hotel;
+		return hotel;
 	}
 
 	@Override
@@ -74,25 +99,23 @@ public class HotelServiceImpl implements HotelService {
 
 	@Override
 	public String addRoom() {
-		System.out.println(PREFIX_TEXT+HOTEL_ID);
-		System.out.println(getAllHotels());
-		int hotelId = ConsoleReader.readInt();
-		System.out.println(PREFIX_TEXT+AVAILABLE_ROOM_NUMBER);
+		int hotelId = getHotelId();
+		System.out.println(PREFIX_TEXT + AVAILABLE_ROOM_NUMBER);
 		int roomNumber = ConsoleReader.readInt();
-		System.out.println(PREFIX_TEXT+ROOM_TYPE_SELECT);
+		System.out.println(PREFIX_TEXT + ROOM_TYPE_SELECT);
 		int roomTypeChoice = ConsoleRangeReader.readInt(MIN_ROOM_TYPE_INT, MAX_ROOM_TYPE_INT);
-		System.out.println(PREFIX_TEXT+PRICE_PER_NIGHT);
+		System.out.println(PREFIX_TEXT + PRICE_PER_NIGHT);
 		BigDecimal pricePerNight = ConsoleReader.readBigDecimal();
-		System.out.println(PREFIX_TEXT+CANCELLATION_PRICE);
+		System.out.println(PREFIX_TEXT + CANCELLATION_PRICE);
 		BigDecimal cancellationPrice = ConsoleReader.readBigDecimal();
 		Room room =
 			new Room(roomNumber, RoomType.values()[roomTypeChoice - 1], pricePerNight, cancellationPrice,
 			         RoomStatus.AVAILABLE);
-		try{
-		hotelRepository.addRoomToHotel(room, hotelId);
+		try {
+			hotelRepository.addRoomToHotel(room, hotelId);
 			return String.format(ROOM_ADD_SUCCESS_MESSAGE, room.getRoomNumber(), hotelId);
-		}catch (Exception e){
-			return String.format(e.getMessage(),hotelId);
+		} catch (Exception e) {
+			return String.format(e.getMessage(), hotelId);
 		}
 	}
 
@@ -106,7 +129,9 @@ public class HotelServiceImpl implements HotelService {
 			}
 			builder.append(hotel.getName())
 			       .append(System.lineSeparator()).append(VERTICAL_BORDER).append(System.lineSeparator());
-			hotel.getRooms().forEach(room -> builder.append(room.toString()).append(System.lineSeparator()).append(VERTICAL_BORDER).append(System.lineSeparator()));
+			hotel.getRooms().forEach(
+				room -> builder.append(room.toString()).append(System.lineSeparator()).append(VERTICAL_BORDER)
+				               .append(System.lineSeparator()));
 			return builder.toString();
 		} catch (HotelNotFoundException e) {
 			return String.format(e.getMessage(), hotelId);
@@ -117,14 +142,166 @@ public class HotelServiceImpl implements HotelService {
 	public Hotel getHotelById(int hotelId) {
 		try {
 			return hotelRepository.getHotelById(hotelId);
-		} catch (HotelNotFoundException e){
-			System.out.printf(e.getMessage()+"\n",hotelId);
+		} catch (HotelNotFoundException e) {
+			System.out.printf(e.getMessage() + "\n", hotelId);
 			return null;
 		}
 	}
 
 	@Override
 	public void bookRoom(Integer id, Integer roomNumber) {
-			hotelRepository.bookRoom(id,roomNumber);
+		hotelRepository.bookRoom(id, roomNumber);
+	}
+
+	@Override
+	public String removeRoom() {
+		int hotelId = getHotelId();
+		hotelRepository.getHotelById(hotelId).getRooms().forEach(System.out::println);
+		System.out.println(PREFIX_TEXT + AVAILABLE_ROOM_NUMBER);
+		int roomNumber = ConsoleReader.readInt();
+		if (hotelRepository.removeRoom(hotelId, roomNumber)) {
+			return REMOVE_ROOM_SUCCESS;
+		}
+		return REMOVE_ROOM_FAIL;
+	}
+
+	@Override
+	public String removeHotel() {
+		int hotelId = getHotelId();
+		if (hotelRepository.removeHotel(hotelId)) {
+			return REMOVE_HOTEL_SUCCESS;
+		}
+		return REMOVE_HOTEL_FAIL;
+	}
+
+	private int getHotelId() {
+		System.out.println(PREFIX_TEXT + HOTEL_ID);
+		System.out.println(getAllHotels());
+		return ConsoleReader.readInt();
+	}
+
+	@Override
+	public String editHotel() {
+		int hotelId = getHotelId();
+		try {
+			Hotel hotel = hotelRepository.getHotelById(hotelId);
+			System.out.println(EDIT_SELECT);
+			System.out.println(HOTEL_EDIT_PARAMS);
+			int choice = ConsoleRangeReader.readInt(MIN_HOTEL_EDIT_INT, MAX_HOTEL_EDIT_INT);
+
+			while (choice != 0) {
+				if (choice == 5) {
+					return "Edit canceled";
+				}
+				try {
+					switch (choice) {
+						case 1 -> {
+							System.out.println(PREFIX_TEXT + HOTEL_PARAMS.get(0));
+							System.out.println("Current name: " + hotel.getName());
+							String newName = ConsoleReader.readString();
+							hotel.setName(newName);
+						}
+						case 2 -> {
+							System.out.println(PREFIX_TEXT + HOTEL_PARAMS.get(1));
+							System.out.println("Current address: " + hotel.getAddress());
+							String newAddress = ConsoleReader.readString();
+							hotel.setAddress(newAddress);
+						}
+						case 3 -> {
+							System.out.println(PREFIX_TEXT + HOTEL_PARAMS.get(2));
+							System.out.println("Current email: " + hotel.getEmail());
+							String newEmail = ConsoleReader.readString();
+							hotel.setEmail(newEmail);
+						}
+						case 4 -> {
+							System.out.println(PREFIX_TEXT + HOTEL_PARAMS.get(3));
+							System.out.println("Current phone: " + hotel.getPhone());
+							String newPhone = ConsoleReader.readString();
+							hotel.setPhone(newPhone);
+						}
+					}
+					System.out.println(EDIT_SELECT);
+					System.out.println(HOTEL_EDIT_PARAMS);
+					choice = ConsoleRangeReader.readInt(MIN_HOTEL_EDIT_INT, MAX_HOTEL_EDIT_INT);
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			if (hotelRepository.updateHotel(hotel)) {
+				return HOTEL_UPDATED_SUCCESS;
+			}
+			return HOTEL_UPDATED_FAIL;
+		} catch (Exception e) {
+			return String.format(e.getMessage(), hotelId);
+		}
+	}
+
+	@Override
+	public String editRoomInHotel() {
+		int hotelId = getHotelId();
+		try {
+			Hotel hotel = hotelRepository.getHotelById(hotelId);
+			hotel.getRooms().forEach(System.out::println);
+			System.out.println(PREFIX_TEXT + AVAILABLE_ROOM_NUMBER);
+			int roomNumber = ConsoleReader.readInt();
+			Room room =
+				hotel.getRooms().stream().filter(r -> r.getRoomNumber().equals(roomNumber)).findFirst().orElse(null);
+			if (room == null) {
+				throw new RoomNotFoundException();
+			}
+			hotel.getRooms().removeIf(r -> r.getRoomNumber().equals(room.getRoomNumber()));
+			System.out.println(EDIT_SELECT);
+			System.out.println(ROOM_EDIT_PARAMS);
+			int choice = ConsoleRangeReader.readInt(MIN_ROOM_EDIT_INT, MAX_ROOM_EDIT_INT);
+			while (choice != 0) {
+				if (choice == 6) {
+					return "Edit canceled";
+				}
+				switch (choice) {
+					case 1 -> {
+						System.out.println(PREFIX_TEXT + ROOM_PARAMS.get(0));
+						System.out.println("Current room number: " + room.getRoomNumber());
+						int newNumberRoom = ConsoleReader.readInt();
+						room.setRoomNumber(newNumberRoom);
+					}
+					case 2 -> {
+						System.out.println(PREFIX_TEXT + ROOM_PARAMS.get(1));
+						System.out.println(ROOM_TYPE_SELECT);
+						System.out.println("Current room type: " + room.getRoomType().name());
+						int roomType = ConsoleRangeReader.readInt(MIN_ROOM_TYPE_INT, MAX_ROOM_TYPE_INT);
+						room.setRoomType(RoomType.values()[roomType - 1]);
+					}
+					case 3 -> {
+						System.out.println(PREFIX_TEXT + ROOM_PARAMS.get(2));
+						System.out.println("Current room price: " + room.getPricePerNight());
+						BigDecimal roomPricePerNight = ConsoleReader.readBigDecimal();
+						room.setPricePerNight(roomPricePerNight);
+					}
+					case 4 -> {
+						System.out.println(PREFIX_TEXT + ROOM_PARAMS.get(3));
+						System.out.println("Current room cancellation fee: " + room.getCancellationFee());
+						BigDecimal roomCancellationFee = ConsoleReader.readBigDecimal();
+						room.setCancellationFee(roomCancellationFee);
+					}
+					case 5 -> {
+						System.out.println(PREFIX_TEXT + ROOM_PARAMS.get(4));
+						System.out.println("Current room status: " + room.getRoomStatus().name());
+						System.out.println(ROOM_STATUS_SELECT);
+						int roomStatus = ConsoleRangeReader.readInt(MIN_ROOM_STATUS_INT, MAX_ROOM_STATUS_INT);
+						room.setRoomStatus(RoomStatus.values()[roomStatus - 1]);
+					}
+				}
+				System.out.println(EDIT_SELECT);
+				System.out.println(ROOM_EDIT_PARAMS);
+				choice = ConsoleRangeReader.readInt(MIN_ROOM_EDIT_INT, MAX_ROOM_EDIT_INT);
+			}
+			hotel.getRooms().add(room);
+			if (hotelRepository.updateHotel(hotel)) {
+				return "Room updated successfully!";
+			}
+			return "Room update failed!";
+		} catch (Exception e) {
+			return e.getMessage();
+		}
 	}
 }

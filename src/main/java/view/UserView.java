@@ -13,6 +13,9 @@ import util.ConsoleRangeReader;
 import util.ConsoleReader;
 import util.DateParser;
 
+import static constants.Shared.HOTEL_ID;
+import static constants.Shared.PREFIX_TEXT;
+
 public class UserView implements ConsoleView {
 	private static User currentUser = null;
 	private static final int MIN_MENU_OPTION = 0;
@@ -36,12 +39,12 @@ public class UserView implements ConsoleView {
 	}
 
 	private void bookRoom(ConsoleView invoker) {
-		System.out.println(bookingService.addBooking());
+		System.out.println(bookingService.addBooking(currentUser));
 		this.showItemMenu(invoker);
 	}
 
 	private void viewRooms(ConsoleView invoker) {
-		System.out.println("Please, enter Hotel ID:");
+		System.out.println(PREFIX_TEXT+HOTEL_ID);
 		System.out.println(hotelService.getAllHotels());
 		int hotelId = ConsoleReader.readInt();
 		System.out.println(hotelService.viewRoomsByHotel(hotelId));
