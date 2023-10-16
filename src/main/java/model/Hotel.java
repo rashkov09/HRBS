@@ -10,7 +10,7 @@ import static constants.Shared.EMAIL_PATTERN;
 import static constants.Shared.PHONE_PATTERN;
 
 public class Hotel {
-	private static final String HOTEL_NAME_PATTERN = "^[A-Za-z0-9]+";
+	private static final String HOTEL_NAME_PATTERN = "^[A-Za-z0-9\\s-]+";
 	private static final String HOTEL_ADDRESS_PATTERN = "^[A-Za-z0-9\\s\\.-]{7,}";
 	private Integer id;
 

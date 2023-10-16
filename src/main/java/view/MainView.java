@@ -39,7 +39,7 @@ public class MainView implements ConsoleView {
 	private void register() {
 		User user = userService.createUser();
 		if (userService.registerUser(user)) {
-			userView.showItemMenu(user.getFirstName(), this);
+			userView.showItemMenu(user, this);
 		} else {
 			this.showItemMenu(this);
 		}
@@ -53,7 +53,7 @@ public class MainView implements ConsoleView {
 		User user = userService.login(username, password);
 		if (user != null) {
 			switch (user.getUserRole()){
-				case USER:	userView.showItemMenu(user.getFirstName(), this);
+				case USER:	userView.showItemMenu(user, this);
 				case ADMIN: adminView.showItemMenu(this);
 			}
 

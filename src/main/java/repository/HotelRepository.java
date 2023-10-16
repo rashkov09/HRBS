@@ -7,6 +7,7 @@ import exceptions.HotelNotFoundException;
 import model.Hotel;
 import model.Room;
 import model.enums.RoomStatus;
+import util.GsonFactory;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -20,7 +21,7 @@ import java.util.NoSuchElementException;
 public class HotelRepository {
 
 	private static final String jsonFilePath = "src/main/resources/hotels.json";
-	private final Gson gson = new Gson();
+	private final Gson gson = GsonFactory.getInstance();
 
 	public List<Hotel> getAllHotels() {
 		List<Hotel> hotels;
@@ -43,15 +44,14 @@ public class HotelRepository {
 		return save(jsonData);
 	}
 
-	public boolean addRoomToHotel(Room room, Integer hotelId) {
+	public void addRoomToHotel(Room room, Integer hotelId) {
 		List<Hotel> hotels = getAllHotels();
 		try {
 			hotels.stream().filter(hotel -> hotel.getId().equals(hotelId)).findFirst().get().addRoom(room);
 			String jsonData = gson.toJson(hotels);
-			return save(jsonData);
+			 save(jsonData);
 		} catch (NoSuchElementException e) {
-			System.out.println("Hotel with id " + hotelId + " not found!");
-			return false;
+			throw new HotelNotFoundException();
 		}
 	}
 

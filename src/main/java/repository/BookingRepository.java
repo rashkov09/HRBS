@@ -3,7 +3,7 @@ package repository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Booking;
-import model.Hotel;
+import util.GsonFactory;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class BookingRepository {
 	private static final String jsonFilePath = "src/main/resources/booking.json";
-	private final Gson gson = new Gson();
+	private final Gson gson = GsonFactory.getInstance();
 
 	public boolean addBooking(Booking booking) {
 			List<Booking> bookings = getAllBookings();

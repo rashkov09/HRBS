@@ -13,6 +13,8 @@ import util.ConsoleReader;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static constants.Shared.AVAILABLE_ROOM_NUMBER;
+import static constants.Shared.HOTEL_ID;
 import static constants.Shared.PREFIX_TEXT;
 import static constants.Shared.VERTICAL_BORDER;
 
@@ -21,6 +23,12 @@ public class HotelServiceImpl implements HotelService {
 	private final static String SUCCESS_MESSAGE = "Hotel %s added successfully!";
 	private final static String FAIl_MESSAGE = "Hotel %s was not added successfully, please try again!";
 	private final static String ROOM_ADD_SUCCESS_MESSAGE = "Room number %d added successfully to hotel id %d";
+	private final static String ROOM_TYPE_SELECT = "room type:\n1. Single\n2. Double\n3. Deluxe\n4. Suite";
+	private final static String PRICE_PER_NIGHT = "price per night:";
+	private final static String CANCELLATION_PRICE =  "cancellation price:";
+	private final static String NO_ROOMS_IN_HOTEL =  "No rooms in this hotel!";
+	private final static int MIN_ROOM_TYPE_INT =  1;
+	private final static int MAX_ROOM_TYPE_INT =  4;
 	private static final List<String>
 		params = List.of("hotel name:", "hotel address", "email address", "phone number");
 	private final HotelRepository hotelRepository = new HotelRepository();
@@ -60,35 +68,32 @@ public class HotelServiceImpl implements HotelService {
 	@Override
 	public String getAllHotels() {
 		StringBuilder builder = new StringBuilder();
-		hotelRepository.getAllHotels().forEach(hotel -> {
-			builder.append(hotel.toString()).append(System.lineSeparator());
-		});
+		hotelRepository.getAllHotels().forEach(hotel -> builder.append(hotel.toString()).append(System.lineSeparator()));
 		return builder.toString();
 	}
 
 	@Override
 	public String addRoom() {
-		System.out.println("Please, insert hotel ID:");
+		System.out.println(PREFIX_TEXT+HOTEL_ID);
 		System.out.println(getAllHotels());
 		int hotelId = ConsoleReader.readInt();
-		System.out.println("Room number:");
+		System.out.println(PREFIX_TEXT+AVAILABLE_ROOM_NUMBER);
 		int roomNumber = ConsoleReader.readInt();
-		int minRoomTypeOption = 1;
-		int maxRoomTypeOption = 4;
-		System.out.println("Please, select room type:\n1. Single\n2. Double\n3. Deluxe\n4. Suite");
-		int roomTypeChoice = ConsoleRangeReader.readInt(minRoomTypeOption, maxRoomTypeOption);
-		System.out.println("Please, insert price per night:");
+		System.out.println(PREFIX_TEXT+ROOM_TYPE_SELECT);
+		int roomTypeChoice = ConsoleRangeReader.readInt(MIN_ROOM_TYPE_INT, MAX_ROOM_TYPE_INT);
+		System.out.println(PREFIX_TEXT+PRICE_PER_NIGHT);
 		BigDecimal pricePerNight = ConsoleReader.readBigDecimal();
-		System.out.println("Please, insert cancellation price:");
+		System.out.println(PREFIX_TEXT+CANCELLATION_PRICE);
 		BigDecimal cancellationPrice = ConsoleReader.readBigDecimal();
 		Room room =
 			new Room(roomNumber, RoomType.values()[roomTypeChoice - 1], pricePerNight, cancellationPrice,
 			         RoomStatus.AVAILABLE);
-
-		if (hotelRepository.addRoomToHotel(room, hotelId)) {
+		try{
+		hotelRepository.addRoomToHotel(room, hotelId);
 			return String.format(ROOM_ADD_SUCCESS_MESSAGE, room.getRoomNumber(), hotelId);
+		}catch (Exception e){
+			return String.format(e.getMessage(),hotelId);
 		}
-		return "Failed";
 	}
 
 	@Override
@@ -97,13 +102,11 @@ public class HotelServiceImpl implements HotelService {
 		try {
 			Hotel hotel = hotelRepository.getHotelById(hotelId);
 			if (hotel.getRooms().isEmpty()) {
-				return "No rooms in this hotel";
+				return NO_ROOMS_IN_HOTEL;
 			}
 			builder.append(hotel.getName())
 			       .append(System.lineSeparator()).append(VERTICAL_BORDER).append(System.lineSeparator());
-			hotel.getRooms().forEach(room -> {
-				builder.append(room.toString()).append(System.lineSeparator()).append(VERTICAL_BORDER).append(System.lineSeparator());
-			});
+			hotel.getRooms().forEach(room -> builder.append(room.toString()).append(System.lineSeparator()).append(VERTICAL_BORDER).append(System.lineSeparator()));
 			return builder.toString();
 		} catch (HotelNotFoundException e) {
 			return String.format(e.getMessage(), hotelId);

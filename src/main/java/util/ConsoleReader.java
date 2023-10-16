@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public final class ConsoleReader {
 
-	private static final String INVALID_INT = "%s is not an int. Try again: ";
+	private static final String INVALID_INT = "%s is not a number. Try again: ";
 	private static final Scanner scanner = new Scanner(System.in);
 
 	private ConsoleReader() {

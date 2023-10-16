@@ -1,5 +1,8 @@
 package model;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class Booking {
@@ -7,13 +10,13 @@ public class Booking {
 	private Hotel hotel;
 	private Room room;
 
-	private Date fromDate;
-	private Date toDate;
+	private LocalDate fromDate;
+	private LocalDate toDate;
 
 	public Booking() {
 	}
 
-	public Booking(Hotel hotel, Room room, Date fromDate, Date toDate) {
+	public Booking(Hotel hotel, Room room, LocalDate fromDate, LocalDate toDate) {
 		this.hotel = hotel;
 		this.room = room;
 		this.fromDate = fromDate;
@@ -37,19 +40,19 @@ public class Booking {
 		this.room = room;
 	}
 
-	public Date getFromDate() {
+	public LocalDate getFromDate() {
 		return fromDate;
 	}
 
-	public void setFromDate(Date fromDate) {
+	public void setFromDate(LocalDate fromDate) {
 		this.fromDate = fromDate;
 	}
 
-	public Date getToDate() {
+	public LocalDate getToDate() {
 		return toDate;
 	}
 
-	public void setToDate(Date toDate) {
+	public void setToDate(LocalDate toDate) {
 		this.toDate = toDate;
 	}
 
@@ -59,5 +62,10 @@ public class Booking {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public BigDecimal calculateProfit(){
+		long days = ChronoUnit.DAYS.between(fromDate,toDate);
+		return this.room.getPricePerNight().multiply(BigDecimal.valueOf(days));
 	}
 }

@@ -12,12 +12,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
-
+import util.GsonFactory;
 
 public class UserRepository {
 
 	private static final String jsonFilePath = "src/main/resources/users.json";
-	private final Gson gson = new Gson();
+	private final Gson gson = GsonFactory.getInstance();
 
 	public User validateUser(String username, String password) {
 		String enteredPasswordHash = DigestUtils.sha256Hex(password);

@@ -1,21 +1,12 @@
 package util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 
-public  class DateParser {
+public class DateParser {
 
-	public static Date parseDateFromString(String dateString){
-		String inputDateFormat = "yyyy-MM-dd";
-		Date date = null ;
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat(inputDateFormat);
-			date= sdf.parse(dateString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return date;
+	public static LocalDate parseFromString(String date){
+		String[] data = date.split("-");
+		return LocalDate.of(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2]));
 	}
+
 }
