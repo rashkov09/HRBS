@@ -5,14 +5,14 @@ import model.enums.RoomType;
 
 import java.math.BigDecimal;
 
-import static constants.HotelRoomProperties.DELUXE_ROOM_AMENITIES;
-import static constants.HotelRoomProperties.DELUXE_ROOM_MAX_OCCUPANCY;
-import static constants.HotelRoomProperties.DOUBLE_ROOM_AMENITIES;
-import static constants.HotelRoomProperties.DOUBLE_ROOM_MAX_OCCUPANCY;
-import static constants.HotelRoomProperties.SINGLE_ROOM_AMENITIES;
-import static constants.HotelRoomProperties.SINGLE_ROOM_MAX_OCCUPANCY;
-import static constants.HotelRoomProperties.SUITE_ROOM_AMENITIES;
-import static constants.HotelRoomProperties.SUITE_ROOM_MAX_OCCUPANCY;
+import static constant.HotelRoomProperties.DELUXE_ROOM_AMENITIES;
+import static constant.HotelRoomProperties.DELUXE_ROOM_MAX_OCCUPANCY;
+import static constant.HotelRoomProperties.DOUBLE_ROOM_AMENITIES;
+import static constant.HotelRoomProperties.DOUBLE_ROOM_MAX_OCCUPANCY;
+import static constant.HotelRoomProperties.SINGLE_ROOM_AMENITIES;
+import static constant.HotelRoomProperties.SINGLE_ROOM_MAX_OCCUPANCY;
+import static constant.HotelRoomProperties.SUITE_ROOM_AMENITIES;
+import static constant.HotelRoomProperties.SUITE_ROOM_MAX_OCCUPANCY;
 
 public class Room {
 

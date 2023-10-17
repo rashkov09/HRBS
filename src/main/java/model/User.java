@@ -1,14 +1,14 @@
 package model;
 
-import exceptions.InvalidUserInputException;
+import exception.InvalidUserInputException;
 import model.enums.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static constants.Shared.EMAIL_PATTERN;
-import static constants.Shared.PHONE_PATTERN;
+import static constant.Shared.EMAIL_PATTERN;
+import static constant.Shared.PHONE_PATTERN;
 
 public class User {
 
@@ -153,7 +153,7 @@ public class User {
                     """;
 		builder.append(String.format(params, this.getFirstName(), this.getLastName(), this.getUserRole(), this.getEmail(),
 		                             this.getPhone())).append(System.lineSeparator());
-		this.getBookings().forEach(booking -> builder.append("\t").append(booking).append(System.lineSeparator()));
+		this.getBookings().forEach(booking -> builder.append(booking).append(System.lineSeparator()));
 		return builder.toString();
 	}
 }

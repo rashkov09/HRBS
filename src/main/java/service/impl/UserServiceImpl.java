@@ -1,6 +1,6 @@
 package service.impl;
 
-import exceptions.UserAlreadyExistsException;
+import exception.UserAlreadyExistsException;
 import model.User;
 import model.enums.UserRole;
 import repository.UserRepository;
@@ -9,7 +9,7 @@ import util.ConsoleReader;
 
 import java.util.List;
 
-import static constants.Shared.PREFIX_TEXT;
+import static constant.Shared.PREFIX_TEXT;
 
 public class UserServiceImpl implements UserService {
 

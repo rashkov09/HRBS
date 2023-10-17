@@ -1,7 +1,7 @@
 package service.impl;
 
-import exceptions.HotelNotFoundException;
-import exceptions.RoomNotFoundException;
+import exception.HotelNotFoundException;
+import exception.RoomNotFoundException;
 import model.Hotel;
 import model.Room;
 import model.enums.RoomStatus;
@@ -14,11 +14,11 @@ import util.ConsoleReader;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static constants.Shared.AVAILABLE_ROOM_NUMBER;
-import static constants.Shared.EDIT_SELECT;
-import static constants.Shared.HOTEL_ID;
-import static constants.Shared.PREFIX_TEXT;
-import static constants.Shared.VERTICAL_BORDER;
+import static constant.Shared.AVAILABLE_ROOM_NUMBER;
+import static constant.Shared.EDIT_SELECT;
+import static constant.Shared.HOTEL_ID;
+import static constant.Shared.PREFIX_TEXT;
+import static constant.Shared.VERTICAL_BORDER;
 
 public class HotelServiceImpl implements HotelService {
 
@@ -44,7 +44,7 @@ public class HotelServiceImpl implements HotelService {
                                                   2. Hotel Address
                                                   3. Email address
                                                   4. Phone number
-	                                                                                                
+	                                                                                               
                                                   5. Cancel
                                                   0. SAVE
                                                   """;
@@ -54,7 +54,7 @@ public class HotelServiceImpl implements HotelService {
                                                  3. Room price per night
                                                  4. Room cancellation fee
                                                  5. Room status
-	                                                                                              
+	                                                                                             
                                                  6. CANCEL
                                                  0. SAVE
                                                  """;
@@ -327,5 +327,15 @@ public class HotelServiceImpl implements HotelService {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
+	}
+
+	@Override
+	public void updateHotel(Hotel hotel) {
+		hotelRepository.updateHotel(hotel);
+	}
+
+	@Override
+	public List<Hotel> getAllHotelsAsList() {
+		return hotelRepository.getAllHotels();
 	}
 }

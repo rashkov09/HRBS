@@ -8,8 +8,8 @@ import service.impl.HotelServiceImpl;
 import util.ConsoleRangeReader;
 import util.ConsoleReader;
 
-import static constants.Shared.HOTEL_ID;
-import static constants.Shared.PREFIX_TEXT;
+import static constant.Shared.HOTEL_ID;
+import static constant.Shared.PREFIX_TEXT;
 
 public class UserView implements ConsoleView {
 
@@ -49,8 +49,14 @@ public class UserView implements ConsoleView {
 			case 0 -> invoker.showItemMenu(this);
 			case 1 -> viewRooms(invoker);
 			case 2 -> bookRoom(invoker);
+			case 3 -> cancelBooking(invoker);
 			case 4 -> viewUserProfile(invoker);
 		}
+	}
+
+	private void cancelBooking(ConsoleView invoker) {
+		System.out.println(bookingService.cancelBooking(currentUser));
+		this.showItemMenu(invoker);
 	}
 
 	private void viewUserProfile(ConsoleView invoker) {

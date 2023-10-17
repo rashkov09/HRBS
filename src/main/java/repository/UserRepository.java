@@ -2,7 +2,7 @@ package repository;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import exceptions.UserAlreadyExistsException;
+import exception.UserAlreadyExistsException;
 import model.User;
 import model.enums.UserRole;
 import org.apache.commons.codec.digest.DigestUtils;

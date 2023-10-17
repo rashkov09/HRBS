@@ -2,6 +2,8 @@ package service;
 
 import model.Hotel;
 
+import java.util.List;
+
 public interface HotelService {
 
 	String addHotel();
@@ -23,4 +25,8 @@ public interface HotelService {
 	String editHotel();
 
 	String editRoomInHotel();
+
+	void updateHotel(Hotel hotel);
+
+	List<Hotel> getAllHotelsAsList();
 }
