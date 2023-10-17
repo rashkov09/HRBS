@@ -1,4 +1,4 @@
-package exceptions;
+package exception;
 
 public class HotelAlreadyExistsException extends RuntimeException{
 	private static final String MESSAGE= "Hotel already exists!";

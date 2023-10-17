@@ -1,13 +1,13 @@
 package model;
 
-import exceptions.InvalidUserInputException;
+import exception.InvalidUserInputException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static constants.Shared.EMAIL_PATTERN;
-import static constants.Shared.PHONE_PATTERN;
+import static constant.Shared.EMAIL_PATTERN;
+import static constant.Shared.PHONE_PATTERN;
 
 public class Hotel {
 	private static final String HOTEL_NAME_PATTERN = "^[A-Za-z0-9\\s-]+";

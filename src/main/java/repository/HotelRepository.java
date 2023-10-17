@@ -2,8 +2,8 @@ package repository;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import exceptions.HotelAlreadyExistsException;
-import exceptions.HotelNotFoundException;
+import exception.HotelAlreadyExistsException;
+import exception.HotelNotFoundException;
 import model.Hotel;
 import model.Room;
 import model.enums.RoomStatus;

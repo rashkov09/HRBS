@@ -13,6 +13,8 @@ public class Booking {
 	private LocalDate fromDate;
 	private LocalDate toDate;
 
+	private Boolean isCanceled;
+
 	public Booking() {
 	}
 
@@ -21,6 +23,7 @@ public class Booking {
 		this.room = room;
 		this.fromDate = fromDate;
 		this.toDate = toDate;
+		this.isCanceled = false;
 	}
 
 	public Hotel getHotel() {
@@ -63,7 +66,18 @@ public class Booking {
 		this.id = id;
 	}
 
+	public Boolean getCanceled() {
+		return isCanceled;
+	}
+
+	public void setCanceled(Boolean canceled) {
+		isCanceled = canceled;
+	}
+
 	public BigDecimal calculateProfit() {
+		if (this.getCanceled().equals(true)){
+			return this.getRoom().getCancellationFee();
+		}
 		long days = ChronoUnit.DAYS.between(fromDate, toDate);
 		return this.room.getPricePerNight().multiply(BigDecimal.valueOf(days));
 	}
@@ -79,9 +93,10 @@ public class Booking {
                          To: %s
                          Total price: %.2f
                          Cancellation fee: %.2f
+                         Is canceled: %s
                          ------------------------------
                          """, this.getId(), this.getHotel().getName(), this.getRoom().getRoomNumber(),
 		                     this.getFromDate().toString(), this.getToDate().toString(), this.calculateProfit(),
-		                     this.getRoom().getCancellationFee());
+		                     this.getRoom().getCancellationFee(),this.getCanceled().toString());
 	}
 }

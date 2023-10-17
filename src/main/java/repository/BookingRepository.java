@@ -2,6 +2,7 @@ package repository;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import exception.BookingNotFoundException;
 import model.Booking;
 import model.enums.RoomStatus;
 import util.GsonFactory;
@@ -26,7 +27,7 @@ public class BookingRepository {
 			return save(jsonData);
 		}
 
-	private List<Booking> getAllBookings() {
+	public List<Booking> getAllBookings() {
 		List<Booking> bookings;
 		try (Reader reader = new FileReader(jsonFilePath)) {
 			Type bookingListType = new TypeToken<List<Booking>>() {
@@ -57,5 +58,21 @@ public class BookingRepository {
 			}
 		}
 		return true;
+	}
+
+	public Booking getBookingById(int bookingId) {
+			List<Booking> bookings =getAllBookings();
+			Booking booking = bookings.stream().filter(b-> b.getId().equals(bookingId)).findFirst().orElse(null);
+			if (booking == null){
+				throw new BookingNotFoundException(bookingId);
+			}
+			return booking;
+	}
+
+	public void updateBooking(Booking booking) {
+		List<Booking> bookings = getAllBookings();
+		bookings.stream().filter(b->b.getId().equals(booking.getId())).findFirst().ifPresent(b -> b.setCanceled(true));
+		String jsonData=  gson.toJson(bookings);
+		save(jsonData);
 	}
 }

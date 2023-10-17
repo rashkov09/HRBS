@@ -1,36 +1,31 @@
 package view;
 
-import android.os.SystemPropertiesProto;
-import model.Hotel;
-import model.Room;
-import model.enums.RoomStatus;
-import model.enums.RoomType;
+import service.BookingService;
 import service.HotelService;
+import service.impl.BookingServiceImpl;
 import service.impl.HotelServiceImpl;
 import util.ConsoleRangeReader;
-import util.ConsoleReader;
-
-import java.math.BigDecimal;
 
 public class AdminView implements ConsoleView {
 
 	public static final String MENU = """
-	                                    Please, select and option to continue:
-	                                      1. Add Hotel
-	                                      2. Add Room to hotel
-	                                      3. Edit Hotel
-	                                      4. Edit Room in hotel
-	                                      5. Remove Hotel
-	                                      6. Remove Room in hotel
-	                                      7. List Hotels
-	                                      8. List all bookings
-	                                      9. Remove user
+                                      Please, select and option to continue:
+                                        1. Add Hotel
+                                        2. Add Room to hotel
+                                        3. Edit Hotel
+                                        4. Edit Room in hotel
+                                        5. Remove Hotel
+                                        6. Remove Room in hotel
+                                        7. List Hotels
+                                        8. List all bookings
+                                        9. Financial report per hotel
 	                                      
-	                                      0. Logout
-	                                  """;
+                                        0. Logout
+                                    """;
 	private static final int MIN_MENU_OPTION = 0;
 	private static final int MAX_MENU_OPTION = 9;
 	private final HotelService hotelService = new HotelServiceImpl();
+	private final BookingService bookingService = new BookingServiceImpl();
 
 	@Override
 	public void showItemMenu(ConsoleView invoker) {
@@ -45,7 +40,19 @@ public class AdminView implements ConsoleView {
 			case 5 -> removeHotel(invoker);
 			case 6 -> removeRoomFromHotel(invoker);
 			case 7 -> listAllHotels(invoker);
+			case 8 -> listAllBookings(invoker);
+			case 9 -> printHotelProfitReport(invoker);
 		}
+	}
+
+	private void printHotelProfitReport(ConsoleView invoker) {
+		System.out.println(bookingService.printFinancialReportPerHotel());
+		this.showItemMenu(invoker);
+	}
+
+	private void listAllBookings(ConsoleView invoker) {
+		System.out.println(bookingService.getAllBookings());
+		this.showItemMenu(invoker);
 	}
 
 	private void editRoomIInHotel(ConsoleView invoker) {
