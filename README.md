@@ -11,7 +11,7 @@ To run application run **mvn clean install** then run
 
 2. **Register as a New User**: Enables new users to create an account.
 
-3. **Activate Admin Rights for Specific User**: Admins can assign admin rights to users using the default password (DEFAULT password = admin99).
+3. **Activate Admin Rights for Specific User**: Can assign admin rights to users using the default password (DEFAULT password = admin99).
 
 ### Admin Functionality
 
